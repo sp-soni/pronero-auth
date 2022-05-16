@@ -28,7 +28,7 @@ class SpiTechApi
     {
         $url = $this->apiServer . 'api/auth/getAccountService';
         $params = ["api_key" => $this->apiKey];
-        $response = $this->execcuteCurl($url, $params);
+        $response = $this->executeCurl($url, $params);
         $response = json_decode($response);
         if (!empty($response->data)) {
             $this->setAccountServiceCookie($response->data);
@@ -42,7 +42,7 @@ class SpiTechApi
     {
         $url = $this->apiServer . 'api/auth';
         $params = ["email" => $email, "password" => $password];
-        $response = $this->execcuteCurl($url, $params);
+        $response = $this->executeCurl($url, $params);
         $response = json_decode($response);
         if (!empty($response->data->token)) {
             $this->setUserCookie($response);
@@ -54,44 +54,47 @@ class SpiTechApi
     {
         $url = $this->apiServer . 'api/auth/forgotPassword';
         $params = ["email" => $email];
-        $response = $this->execcuteCurl($url, $params);
-        $response = json_decode($response);      
+        $response = $this->executeCurl($url, $params);
+        $response = json_decode($response);
         return $response;
     }
 
     public function createUser($params)
     {
         $url = $this->apiServer . 'api/accountUser';
-        $response = $this->execcuteCurl($url, $params);
-        $response = json_decode($response);     
+        $response = $this->executeCurl($url, $params);
+        $response = json_decode($response);
         return $response;
     }
 
-    public function updateUser($api_user_id,$params)
+    public function updateUser($api_user_id, $params)
     {
-        $url = $this->apiServer . 'api/accountUser/'.$api_user_id;
-        $response = $this->execcuteCurl($url, $params,"PUT");
-        $response = json_decode($response);       
+        $url = $this->apiServer . 'api/accountUser/' . $api_user_id;
+        $response = $this->executeCurl($url, $params, "PUT");
+        $response = json_decode($response);
         return $response;
     }
 
     public function sendMail($to, $subject, $message)
     {
-        $params=[
-            "to"=>$to,
-            "subject"=>$subject,
-            "message"=>$message
-        ];
-        $url = $this->apiServer . 'emailservices/sendMail/';
-        $response = $this->execcuteCurl($url, $params,"POST");
-        $response = json_decode($response);       
+        $params = array(
+            "to" => $to,
+            "subject" => $subject,
+            "message" => $message
+        );
+        $url = $this->apiServer . 'api/emailServices/sendmail';
+        $response = $this->executeCurl($url, $params);
+        $response = json_decode($response);
         return $response;
     }
 
 
     // other supportive methods   
 
-    private function execcuteCurl($url, $params,$method="POST")
+    /**
+     * Used to call with token
+     */
+    private function executeCurl($url, $params, $method = "POST")
     {
         try {
             $ch = curl_init();
@@ -100,7 +103,7 @@ class SpiTechApi
                 $header = array(
                     'Authorization: Bearer ' . $cookie->token,
                     'Content-Type: application/x-www-form-urlencoded'
-                );               
+                );
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
             }
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -110,10 +113,9 @@ class SpiTechApi
             $response = curl_exec($ch);
         } catch (Exception $ex) {
             error_log($ex, $this->logPath . "SpiTechApi.log");
-        }       
+        }
         return $response;
     }
-
 
     public function setAccountServiceCookie($accountService)
     {
@@ -136,7 +138,7 @@ class SpiTechApi
     {
         $temp = new stdClass();
         if (!empty($_COOKIE["SpiTechApi_token"])) {
-            $temp->token = str_replace('"','',$_COOKIE["SpiTechApi_token"]);
+            $temp->token = str_replace('"', '', $_COOKIE["SpiTechApi_token"]);
         }
 
         if (!empty($_COOKIE["SpiTechApi_account_service"])) {
@@ -156,7 +158,8 @@ class SpiTechApi
         return $temp;
     }
 
-    public function destroyUserCookie(){
+    public function destroyUserCookie()
+    {
         $domain = $_SERVER['HTTP_HOST'];
         $avaialble_path = $this->cookiePath;
         unset($_COOKIE['SpiTechApi_token']);
