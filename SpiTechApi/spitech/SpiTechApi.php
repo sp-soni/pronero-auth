@@ -75,6 +75,19 @@ class SpiTechApi
         return $response;
     }
 
+    public function sendMail($to, $subject, $message)
+    {
+        $params=[
+            "to"=>$to,
+            "subject"=>$subject,
+            "message"=>$message
+        ];
+        $url = $this->apiServer . 'emailservices/sendMail/';
+        $response = $this->execcuteCurl($url, $params,"POST");
+        $response = json_decode($response);       
+        return $response;
+    }
+
 
     // other supportive methods   
 
