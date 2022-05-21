@@ -41,7 +41,7 @@ class SpiTechApi
     public function auth($email, $password)
     {
         $url = $this->apiServer . 'api/auth';
-        $params = ["email" => $email, "password" => $password];
+        $params = ["email" => $email, "password" => $password, "api_key"=>$this->apiKey];
         $response = $this->executeCurl($url, $params);
         $response = json_decode($response);
         if (!empty($response->data->token)) {
