@@ -1,5 +1,7 @@
 <?php
-
+/*
+SpiTech Auth APIs
+*/
 class SpiTechApi
 {
 
