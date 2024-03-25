@@ -5,10 +5,7 @@
     "type": "library",
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "license": "MIT",
-    "require": {
-      "php": "^8.0"
-    },
+    "license": "MIT",    
     "autoload": {
       "psr-4": {
         "SPS\\": "src/"
