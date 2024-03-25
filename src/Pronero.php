@@ -1,5 +1,5 @@
 <?php
-namespace ProneroAuth;
+namespace SPS;
 
 class Pronero
 {

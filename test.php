@@ -2,7 +2,7 @@
 
 require_once 'src/Pronero.php';
 
-$pronero = new  ProneroAuth\Pronero('c081547e59a076e978ea9a6bac147a0c');
+$pronero = new  SPS\Pronero('c081547e59a076e978ea9a6bac147a0c');
 
 //projectInfo
 $apiResponse1 = $pronero->projectInfo();
